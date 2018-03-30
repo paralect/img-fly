@@ -1,7 +1,7 @@
 FROM node:8.9.4
 
 EXPOSE 3002
-COPY ["./package.json", "./package-lock.json", "./.eslintrc.js", "./.eslintignore", "./.babelrc", "./browserslist", "./.stylelintrc", "/app/"]
+COPY ["./package.json", "./package-lock.json", "./.eslintrc.js", "./.eslintignore", "./.babelrc", "./browserslist", "./.stylelintrc", "./.flowconfig", "/app/"]
 COPY ./src /app/src
 
 WORKDIR /app
