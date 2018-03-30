@@ -7,7 +7,7 @@ pipeline:
       - ./bin/drone-run-tests.sh api-tests
       - ./bin/drone-run-tests.sh web-tests
     when:
-      event: [pull_request]
+      event: [pull_request, push]
       
   docker-release-new-version:
     image: plugins/docker
