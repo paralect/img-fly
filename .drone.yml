@@ -4,8 +4,8 @@ pipeline:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
-      - ./bin/drone-run-tests.sh api-tests
-      - ./bin/drone-run-tests.sh web-tests
+      - ./bin/drone-run-tests.sh service-tests
+      - ./bin/drone-run-tests.sh ui-demo-tests
     when:
       event: [pull_request, push]
       

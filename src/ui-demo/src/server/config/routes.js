@@ -1,11 +1,5 @@
-const axios = require('axios');
 const Router = require('koa-router');
-const jwt = require('jsonwebtoken');
-const _ = require('lodash');
-
 const config = require('config');
-
-const { logger } = global;
 
 const indexRouter = new Router();
 

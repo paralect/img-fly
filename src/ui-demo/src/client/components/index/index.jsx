@@ -10,7 +10,6 @@ export default class Index extends Component<*> {
     return (
       <div>
         <h1>TODO</h1>
-        
       </div>
     );
   }

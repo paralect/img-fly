@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import type { Node } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import classnames from 'classnames';
 
 import type { StateType as ReduxStateType } from 'resources/types';
 
