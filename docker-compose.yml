@@ -1,0 +1,19 @@
+version: '3.3'
+services:
+  service:
+    build:
+      context: "./src/service"
+      dockerfile: Dockerfile.dev
+    volumes:
+      - "./src/service/src:/app/src"
+    ports:
+      - "3001:3001"
+  ui-demo:
+    build:
+      context: "./src/ui-demo"
+      dockerfile: Dockerfile.dev
+    volumes:
+      - "./src/ui-demo/src:/app/src"
+    ports:
+      - "3002:3002"
+      - "8081:8081"

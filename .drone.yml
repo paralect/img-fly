@@ -1,0 +1,27 @@
+pipeline:
+  run-test-suite:
+    image: michalpodeszwa/docker-compose:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - ./bin/drone-run-tests.sh api-tests
+      - ./bin/drone-run-tests.sh web-tests
+    when:
+      event: [pull_request]
+      
+  docker-release-new-version:
+    image: plugins/docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    tags:
+      - $DRONE_TAG
+      - latest
+    repo: paralect/img-fly
+    dockerfile: ./src/service/Dockerfile
+    context: ./src/service
+    secrets: [ docker_password, docker_email, docker_username ]
+    when:
+        event: [ tag ]
+        branches: [ master ]
+
+branches: [ master, "*:master" ]

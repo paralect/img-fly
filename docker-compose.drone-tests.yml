@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+  service-tests:
+    build:
+      context: ./service
+      dockerfile: Dockerfile
+    command: npm test
+  ui-demo-tests:
+    build:
+      context: ./ui-demo
+      dockerfile: Dockerfile
+    command: npm test
