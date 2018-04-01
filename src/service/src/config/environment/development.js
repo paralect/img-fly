@@ -1,6 +1,8 @@
 module.exports = {
-  jwt: {
-    secret: 'the_secret',
+  storage: {
+    type: 'mongo',
+    connection: 'mongodb://mongo:27017/img-fly-development',
+    collection: 'img-fly-files',
   },
-  authCookieName: 'auth',
+  apiUrl: `http://localhost:3001`,
 };

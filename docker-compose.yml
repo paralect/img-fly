@@ -1,5 +1,12 @@
 version: '3.3'
 services:
+  mongo:
+    command: mongod
+    image: mongo:3.6.3
+    ports:
+      - "27017:27017" # map port to none standard port, to avoid conflicts with locally installed mongodb.
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   service:
     build:
       context: "./src/service"
@@ -8,12 +15,21 @@ services:
       - "./src/service/src:/app/src"
     ports:
       - "3001:3001"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    links: 
+      - mongo
   ui-demo:
     build:
       context: "./src/ui-demo"
       dockerfile: Dockerfile.dev
     volumes:
       - "./src/ui-demo/src:/app/src"
+    environment:
+      NODE_ENV: "development"
+      HRM_HOST: "0.0.0.0"
     ports:
       - "3002:3002"
       - "8081:8081"

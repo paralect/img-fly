@@ -23,6 +23,8 @@ Img Fly is a simple service which allow uploading and manipulating images on a f
 4. Once image processed it is get cached on S3, when image is not used for over 30 days (via config) image should be deleted on s3.
 5. As a developer I can upload images directly from a browser. 
 
+⚠️ — at the moment 1-3 is implemented. Use with caution, the service is still in early days. All transformations are applied on the fly and do not persisted to the S3 bucket.
+
 Basic security: 
 1. To secure uploads we could use simple `md5(secret, id)` approach. As a developer I generate simple imgFlyToken from a secret (configured in a config) and some id (that could be current userId, resourceId or whatever else)
 2. By default, if strict security isn't required we could return direct S3 url as a header for `/w_200/puppy.png` request. 
@@ -34,11 +36,37 @@ Tools:
 
 ## Getting Started
 
-To Do
+1. Clone this repo
+2. Create `.env` file with Amazon s3 credentials (see [.env.example](./.env.example)).
+3. Start a project using `./bin/start.sh`. 
+4. Navigate to the `http://localhost:3002/` and upload image file.
+5. Click on the transformation link and play around with url params. 
+
+*Extract + Resize example:*
+`http://localhost:3001/5ac0bb5fab7ce4028e879d03/extract-left_0,top_30,width_400,height_300+resize-width_300/nice_file_name.png`
+
+
+### Supported transformations
+
+1. [Extract](http://sharp.pixelplumbing.com/en/stable/api-operation/#extract)
+2. [Resize](http://sharp.pixelplumbing.com/en/stable/api-resize/#resize)
+
+Feel free to submit PR's with more transformations. You'll need to implement a function which maps query params to the [sharp](http://sharp.pixelplumbing.com/) function params.
+
+We use following rules to form query params. 
+1. `+` is used to combine multiple transformations.
+2. `-` is used as separator between transformation name and params.
+3. `_` is used to separate param name and param value;
+
+*Example of applying extract & resize transformations: * `extract-left_0,top_30,width_400,height_300+resize-width_300`
+
+## Supported transformations
+
+http://localhost:3001/5ac0bb5fab7ce4028e879d03/extract-left_0,top_30,width_400,height_300+resize-width_300/nice_file_name.png
 
 ## Demo
 
-N/A yet
+N/A
 
 ## Change Log
 

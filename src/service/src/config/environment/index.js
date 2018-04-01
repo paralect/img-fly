@@ -9,6 +9,12 @@ let base = {
   port: process.env.PORT || 3001,
   isDev: env === 'development',
   isTest: env === 'test',
+  aws: {
+    accessKey: process.env.AWS_ACCESS_KEY,
+    secretKey: process.env.AWS_SECRET_KEY,
+    region: process.env.AWS_S3_REGION,
+    bucket: process.env.AWS_S3_BUCKET,
+  },
 };
 
 const envConfig = require(`./${env}.js`); // eslint-disable-line
