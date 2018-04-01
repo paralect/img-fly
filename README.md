@@ -42,7 +42,7 @@ Tools:
 4. Navigate to the `http://localhost:3002/` and upload image file.
 5. Click on the transformation link and play around with url params. 
 
-*Extract + Resize example:*
+Extract + Resize example:
 `http://localhost:3001/5ac0bb5fab7ce4028e879d03/extract-left_0,top_30,width_400,height_300+resize-width_300/nice_file_name.png`
 
 
@@ -58,11 +58,7 @@ We use following rules to form query params.
 2. `-` is used as separator between transformation name and params.
 3. `_` is used to separate param name and param value;
 
-*Example of applying extract & resize transformations: * `extract-left_0,top_30,width_400,height_300+resize-width_300`
-
-## Supported transformations
-
-http://localhost:3001/5ac0bb5fab7ce4028e879d03/extract-left_0,top_30,width_400,height_300+resize-width_300/nice_file_name.png
+Example of applying extract & resize transformations: `extract-left_0,top_30,width_400,height_300+resize-width_300`
 
 ## Demo
 
