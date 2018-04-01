@@ -19,7 +19,7 @@ pipeline:
     repo: paralect/img-fly
     dockerfile: ./src/service/Dockerfile
     context: ./src/service
-    secrets: [ docker_password, docker_email, docker_username ]
+    secrets: [ docker_password, docker_username ]
     when:
         event: [ tag ]
         branches: [ master ]
