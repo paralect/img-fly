@@ -14,7 +14,7 @@ pipeline:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     tags:
-      - $DRONE_TAG
+      - ${DRONE_TAG}
       - latest
     repo: paralect/img-fly
     dockerfile: ./src/service/Dockerfile
