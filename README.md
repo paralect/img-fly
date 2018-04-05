@@ -50,6 +50,7 @@ Extract + Resize example:
 
 1. [Extract](http://sharp.pixelplumbing.com/en/stable/api-operation/#extract)
 2. [Resize](http://sharp.pixelplumbing.com/en/stable/api-resize/#resize)
+3. [Crop](http://sharp.pixelplumbing.com/en/stable/api-resize/#crop)
 
 Feel free to submit PR's with more transformations. You'll need to implement a function which maps query params to the [sharp](http://sharp.pixelplumbing.com/) function params.
 
@@ -59,6 +60,8 @@ We use following rules to form query params.
 3. `_` is used to separate param name and param value;
 
 Example of applying extract & resize transformations: `extract-left_0,top_30,width_400,height_300+resize-width_300`
+
+Example of resize and crop: `resize-width_300,height_300+crop-strategy_attention`
 
 ## Demo
 

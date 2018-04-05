@@ -24,9 +24,10 @@ const parseQuery = (query) => {
   if (paramsParts.length === 2) {
     for(const param of paramsParts) {
       const paramParts = param.split('_');
-      if (paramParts !== 2) {
+      if (paramParts.length !== 2) {
         return throwInvalidError();
       }
+
       result[paramParts[0]] = parseInt(paramParts[1], 10);
     }
   } else {

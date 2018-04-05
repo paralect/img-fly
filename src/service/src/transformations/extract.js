@@ -16,7 +16,6 @@ const parseQuery = (query) => {
   }
 
   const paramsParts = transformParts[1].split(',');
-  console.dir(paramsParts);
   if (paramsParts.length !== 4) {
     return throwInvalidError();
   }

@@ -5,6 +5,7 @@ const storage = require('storage');
 const mime = require('mime-types');
 const transformService = require('services/transform.service');
 const sharp = require('sharp');
+const { logger } = global;
 
 const getFileId = ({ id, extName}) => `${id}${extName}`;
 
@@ -22,6 +23,10 @@ exports.getFile = async (ctx, next) => {
     let transformObject = sharp();
     try {
       transformObject = transformService.apply(transform, transformObject);
+
+      transformObject.toBuffer(function (err, outputBuffer, info) {
+        logger.info(`Transformed object meta: ${JSON.stringify(info)}`);
+      });
     } catch (err) {
       ctx.status = 404;
       ctx.body = err.message;
