@@ -7,7 +7,7 @@ const throwInvalidError = () => {
     Read more at: http://sharp.pixelplumbing.com/en/stable/api-resize/#resize`;
   
   throw new Error(errorMessage);
-}
+};
 
 const parseQuery = (query) => {
   const transformParts = query.split('-');
@@ -53,5 +53,5 @@ const apply = (query, sharp) => {
 
 module.exports = {
   name: 'resize',
-  apply: apply,
-}
+  apply,
+};

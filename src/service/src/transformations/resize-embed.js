@@ -1,12 +1,12 @@
 const { logger } = global;
 
 const apply = (query, sharp) => {
-  logger.info('Applying [max] transformation');
+  logger.info('Applying [embed] transformation');
 
-  return sharp.max();
+  return sharp.embed();
 };
 
 module.exports = {
-  name: 'max',
+  name: 'embed',
   apply,
 };

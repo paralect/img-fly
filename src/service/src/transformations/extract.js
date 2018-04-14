@@ -5,9 +5,9 @@ const throwInvalidError = () => {
     Make sure that transformation query has all params: 
     extract-left_10,top_0,width_100,height_200.
     Read more at: http://sharp.pixelplumbing.com/en/stable/api-operation/#extract`;
-  
+
   throw new Error(errorMessage);
-}
+};
 
 const parseQuery = (query) => {
   const transformParts = query.split('-');
@@ -21,16 +21,16 @@ const parseQuery = (query) => {
   }
 
   const result = {};
-  for(const param of paramsParts) {
+  paramsParts.forEach((param) => {
     const paramParts = param.split('_');
     if (paramParts.length !== 2) {
-      return throwInvalidError();
+      throwInvalidError();
     }
     result[paramParts[0]] = parseInt(paramParts[1], 10);
-  }
+  });
 
   return result;
-}
+};
 
 const apply = (query, sharp) => {
   const transformParams = parseQuery(query);
@@ -41,5 +41,5 @@ const apply = (query, sharp) => {
 
 module.exports = {
   name: 'extract',
-  apply: apply,
-}
+  apply,
+};

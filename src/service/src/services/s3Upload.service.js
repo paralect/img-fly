@@ -1,7 +1,7 @@
 const storage = require('storage');
 const path = require('path');
 const AWS = require('aws-sdk');
-const S3 = require('aws-sdk').S3;
+const { S3 } = require('aws-sdk');
 const s3Stream = require('s3-streams');
 const config = require('config');
 
@@ -18,7 +18,6 @@ const mapSettingsToAwsConfig = (awsSettings) => {
 
 const awsConfig = mapSettingsToAwsConfig(config.aws);
 const s3bucket = new AWS.S3(awsConfig);
-
 
 const uploadToS3Bucket = (bucket, params) => new Promise((resolve, reject) => {
   bucket.upload(params, (err, data) => {
@@ -50,10 +49,10 @@ const getObjectFromS3 = (s3, params) => new Promise((resolve, reject) => {
   });
 });
 
-module.exports.deleteFiles = async function (fileIds) {
+module.exports.deleteFiles = async function deleteFiles(fileIds) {
   const keysS3 = fileIds.map(key => ({ Key: key }));
   const params = {
-    Bucket: awsSettings.bucket,
+    Bucket: awsConfig.params.Bucket,
     Delete: {
       Objects: keysS3,
     },
@@ -62,9 +61,9 @@ module.exports.deleteFiles = async function (fileIds) {
   await deleteObjectsFromS3(s3bucket, params);
 };
 
-module.exports.saveFiles = async function (files) {
+module.exports.saveFiles = async function saveFiles(files) {
   const savedFiles = [];
-
+  
   for (const file of files) {
     const fileName = file.filename;
     const extName = path.extname(fileName);
@@ -87,17 +86,16 @@ module.exports.saveFiles = async function (files) {
   return savedFiles;
 };
 
-module.exports.getFileStream = function (fileKey) {
-  return s3Stream.ReadStream(new S3(awsConfig), { // eslint-disable-line
+module.exports.getFileStream = function getFileStream(fileKey) {
+  return s3Stream.ReadStream(new S3(awsConfig), {
     Bucket: awsConfig.params.Bucket,
     Key: fileKey,
   });
 };
 
-module.exports.getFileSizeInBytes = (attachmentId) => {
-  const fileKey = attachmentId;
+module.exports.getFileSizeInBytes = (fileKey) => {
   return getObjectFromS3(s3bucket, {
-    Bucket: awsSettings.bucket,
+    Bucket: awsConfig.params.Bucket,
     Key: fileKey,
   }).then(data => +data.ContentLength);
 };

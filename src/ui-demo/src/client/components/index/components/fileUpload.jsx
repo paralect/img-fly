@@ -4,8 +4,8 @@ import { apiClient } from 'helpers/api';
 
 class FileUplaod extends Component {
   state = {
-    originalUrl: `Upload any image file..`,
-    transformUrl: ''
+    originalUrl: 'Upload any image file..',
+    transformUrl: '',
   }
 
   onDrop = (acceptedFiles, rejectedFiles) => {
@@ -25,7 +25,7 @@ class FileUplaod extends Component {
 
         this.setState({
           originalUrl,
-          transformUrl: `${baseTransformUrl}resize-width_300/${originalName}`
+          transformUrl: `${baseTransformUrl}resize-width_1080,height_1080+max/${originalName}`,
         });
       });
   }
@@ -33,17 +33,17 @@ class FileUplaod extends Component {
   render() {
     return (
       <div>
-        <Dropzone onDrop={(files) => this.onDrop(files)}>
+        <Dropzone onDrop={files => this.onDrop(files)}>
           <div>Try dropping some files here, or click to select files to upload.</div>
         </Dropzone>
         <div>
           <h3>Uploaded file url</h3>
-          {this.state.transformUrl ? 
+          {this.state.transformUrl ?
             <div>
               <span><b>Original file url: </b> <a href={this.state.originalUrl} target="_blank">{this.state.originalUrl}</a></span> <br />
               <span><b>Sample on the fly transformation url</b>: <a href={this.state.transformUrl} target="_blank">{this.state.transformUrl}</a></span> <br />
-              <span><b>Tip:</b> copy/paste 'resize transformation url' and try chaning values</span>
-            </div> : 
+              <span><b>Tip:</b> copy/paste resize transformation url and try chaning values</span>
+            </div> :
             <span>
               Upload any image file..
             </span>
