@@ -21,6 +21,7 @@ services:
       - mongo
     links: 
       - mongo
+
   worker:
     build:
       context: "./src/service"
@@ -34,6 +35,7 @@ services:
       - mongo
     links: 
       - mongo
+
   ui-demo:
     build:
       context: "./src/ui-demo"

@@ -2,5 +2,5 @@ module.exports = {
   jwt: {
     secret: 'the_secret',
   },
-  apiUrl: 'http://localhost:3001',
+  apiUrl: 'http://localhost:4001',
 };
