@@ -3,7 +3,10 @@ const { logger } = global;
 const apply = (query, sharp) => {
   logger.info('Applying [max] transformation');
 
-  return sharp.max();
+  return {
+    sharp: sharp.max(),
+    params: {},
+  };
 };
 
 module.exports = {

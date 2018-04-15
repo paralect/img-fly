@@ -1,5 +1,3 @@
-const storage = require('storage');
-const path = require('path');
 const AWS = require('aws-sdk');
 const { S3 } = require('aws-sdk');
 const s3Stream = require('s3-streams');
@@ -61,29 +59,16 @@ module.exports.deleteFiles = async function deleteFiles(fileIds) {
   await deleteObjectsFromS3(s3bucket, params);
 };
 
-module.exports.saveFiles = async function saveFiles(files) {
-  const savedFiles = [];
-  
-  for (const file of files) {
-    const fileName = file.filename;
-    const extName = path.extname(fileName);
-    const fileId = storage.generateId();
-    const uniqueFileName = `${fileId}${extName}`;
+module.exports.uploadFiles = async function uploadFiles(fileUploads) {
+  const s3Uploads = [];
+  fileUploads.forEach((fileData) => {
+    s3Uploads.push(uploadToS3Bucket(s3bucket, {
+      Key: fileData.key,
+      Body: fileData.file,
+    }));
+  });
 
-    await uploadToS3Bucket(s3bucket, {
-      Key: uniqueFileName,
-      Body: file,
-    });
-
-    savedFiles.push({
-      fileId,
-      extName,
-      fileName,
-      mimeType: file.mimeType,
-    });
-  }
-
-  return savedFiles;
+  return Promise.all(s3Uploads);
 };
 
 module.exports.getFileStream = function getFileStream(fileKey) {

@@ -4,6 +4,7 @@ const throwInvalidError = () => {
   const errorMessage = `Extract transformation is invalid. 
     Make sure that transformation query at least convertion format and optional query params: 
     toFormat-jpeg,quality_50,optimiseScans_true.
+    Only jpeg and png transformations are allowed.
     Read more at: http://sharp.dimens.io/en/stable/api-output/#toformat
     Full options list: http://sharp.dimens.io/en/stable/api-output/#jpeg`;
 
@@ -26,6 +27,8 @@ const parseParam = (name, value) => {
   }
 };
 
+const allowedFormats = ['jpeg', 'png'];
+
 const parseQuery = (query) => {
   const transformParts = query.split('-');
   if (transformParts.length !== 2) {
@@ -37,7 +40,11 @@ const parseQuery = (query) => {
     return throwInvalidError();
   }
 
-  const format = paramsParts.shift();
+  let format = paramsParts.shift();
+  format = format.toLowerCase();
+  if (allowedFormats.indexOf(format) === -1) {
+    return throwInvalidError();
+  }
 
   const options = {};
   paramsParts.forEach((param) => {
@@ -58,8 +65,14 @@ const apply = (query, sharp) => {
   const { format, options } = parseQuery(query);
   logger.info(`Applying [toFormat]. Converting to ${format} with options: ${JSON.stringify(options)}`);
 
-  return sharp
-    .toFormat(format, options);
+  return {
+    sharp: sharp
+      .toFormat(format, options),
+    params: {
+      format,
+      options,
+    },
+  };
 };
 
 module.exports = {

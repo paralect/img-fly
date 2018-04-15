@@ -5,28 +5,65 @@ const fileSchema = require('./mongo.file.schema');
 const fileService = db.createService(config.storage.collection, fileSchema);
 
 module.exports = {
-  createFilesMeta: async function(files) {
+  createFilesMeta: async function createFilesMeta(files) {
     const filesMeta = files.map((file) => {
-      return {
-        _id: file.fileId,
-        name: file.fileName,
-        extName: file.extName,
+      const result = {
+        _id: file._id,
+        name: file.name,
         createdOn: new Date(),
-        originalId: null,
-        transformHash: null,
+        originalId: file.originalId || null,
+        transformHash: file.transformHash || null,
+        transformQuery: file.transformQuery || null,
+        storage: file.storage,
       };
+      if (file.transformHash) {
+        result._processingStatus = 'new'; // go ahead for the background job
+      }
+
+      return result;
     });
 
-    return await fileService.create(filesMeta);
+    return fileService.create(filesMeta);
   },
 
-  getFileMeta: ({ fileId, transofrmHash }) => {
-    const query = {
-      $or: [{ _id: fileId }]
-    };
-    if (transofrmHash) {
-      query.$or.push({ transformHash });
+  // This method is slower than createFilesMeta
+  // but make sures to not create two files with same transformHash
+  createOrUpdateFileMeta: async function createOrUpdateFileMeta(file) {
+    if (file.transformHash === null) {
+      throw new Error('createOrUpdateFileMeta requires transformHash');
     }
+
+    const update = {
+      $set: {
+        _id: file._id,
+        name: file.name,
+        createdOn: new Date(),
+        originalId: file.originalId || null,
+        transformHash: file.transformHash || null,
+        transformQuery: file.transformQuery || null,
+        storage: file.storage,
+      },
+    };
+
+    if (file.transformHash) {
+      update.$set._processingStatus = 'new'; // go ahead for the background job
+    }
+
+    return fileService.findOneAndUpdate({ transformHash: file.transformHash }, update);
+  },
+
+  getFileMeta: ({ fileId }) => {
+    const query = {
+      _id: fileId,
+    };
+
+    return fileService.findOne(query);
+  },
+
+  getFileMetaByHash: ({ transformHash }) => {
+    const query = {
+      transformHash,
+    };
 
     return fileService.findOne(query);
   },
@@ -37,5 +74,5 @@ module.exports = {
 
   generateId: () => {
     return fileService.generateId();
-  }
+  },
 };

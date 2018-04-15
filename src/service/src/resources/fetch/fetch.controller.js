@@ -1,41 +1,161 @@
-const parse = require('async-busboy');
-const fs = require('fs');
-const s3UploadService = require('services/s3Upload.service');
-const storage = require('storage');
+const path = require('path');
 const mime = require('mime-types');
-const transformService = require('services/transform.service');
 const sharp = require('sharp');
+const md5 = require('md5');
 
-const getFileId = ({ id, extName }) => `${id}${extName}`;
+const storage = require('storage');
+const s3UploadService = require('services/s3Upload.service');
+const transformService = require('services/transform.service');
+const fileService = require('services/file.service');
+
+async function transformImage({ ctx, transformQuery, storageFileId }) {
+  let fileStream = await s3UploadService.getFileStream(storageFileId);
+  let transformObject = sharp();
+  let transformResult;
+
+  try {
+    transformResult = transformService.apply(transformQuery, transformObject);
+    transformObject = transformResult.sharp;
+    fileStream = fileStream.pipe(transformObject);
+  } catch (err) {
+    ctx.status = 400;
+    ctx.body = err.message;
+  }
+
+  return {
+    fileStream,
+    appliedTransformations: transformResult.appliedTransformations,
+  };
+}
+
+async function createTransformationMeta({
+  transformQuery,
+  transformHash,
+  appliedTransformations,
+  originalFileMeta,
+}) {
+  const fileId = storage.generateId();
+  let fileName = originalFileMeta.name;
+  let extName = path.extname(fileName);
+
+  const toFormatTransformation = appliedTransformations.toformat;
+
+  // change file extention if toFormat transformation applied
+  if (toFormatTransformation) {
+    const newExtName = `.${toFormatTransformation.format}`;
+    fileName = fileName.replace(extName, newExtName);
+    extName = newExtName;
+  }
+
+  const fileIdWithExt = `${fileId}${extName}`;
+
+  const file = {
+    _id: fileId,
+    name: fileName,
+    createdOn: new Date(),
+    originalId: originalFileMeta._id,
+    transformQuery,
+    transformHash,
+    storage: {
+      type: 's3',
+      fileId: fileIdWithExt,
+    },
+  };
+
+  return storage.createFilesMeta([file]);
+}
+
+function setFileUrlHeader(ctx, { _id, name }) {
+  ctx.set('ImgFly_FileUrl', fileService.getFileUrl(_id, name));
+}
+
+function getContentType(fileId) {
+  return mime.contentType(fileId) || 'application/octet-stream';
+}
+
+async function streamS3ToResponse(ctx, fileMeta) {
+  setFileUrlHeader(ctx, { _id: fileMeta._id, name: fileMeta.name });
+  ctx.type = getContentType(fileMeta.storage.fileId);
+  ctx.body = await s3UploadService.getFileStream(fileMeta.storage.fileId);
+}
+
+function streamToResponse(ctx, fileMeta, fileStream) {
+  setFileUrlHeader(ctx, { _id: fileMeta._id, name: fileMeta.name });
+  ctx.type = getContentType(fileMeta.storage.fileId);
+  ctx.body = fileStream;
+}
 
 exports.getFile = async (ctx, next) => {
-  const { id, fileName, transform } = ctx.params;
+  const { id, transform } = ctx.params;
   const fileMeta = await storage.getFileMeta({ fileId: id });
   if (!fileMeta) {
     ctx.status = 404;
     return;
   }
-  const fileId = getFileId({ id: fileMeta._id, extName: fileMeta.extName });
 
-  // TODO: cache transformation to S3 in background
-  // 1. Create a task to generate file after response being sent
-  // 2. Create a md5 hash from transformation query + original fileId
-  // 3. Generate unique fileId and send unique url without transform params to the client
-  // 4. Verify upload identity using by validating md5 hash of (resourceId + imgFly secret key)
-  let fileStream = await s3UploadService.getFileStream(fileId);
-  if (transform) {
-    let transformObject = sharp();
-    try {
-      transformObject = transformService.apply(transform, transformObject);
-    } catch (err) {
-      ctx.status = 404;
-      ctx.body = err.message;
+  const isOriginalFile = fileMeta.originalId === null;
+  if (isOriginalFile) {
+    // return origin right away if no transformation needed
+    if (!transform) {
+      streamS3ToResponse(ctx, fileMeta);
       return;
     }
 
-    fileStream = fileStream.pipe(transformObject);
+    const transformHash = md5(`${fileMeta._id}${transform}`);
+
+    // check file with such transformation already exists
+    let transformFileMeta = await storage.getFileMetaByHash({ transformHash });
+
+    // If file proccessed and stored, just stream it to response
+    if (transformFileMeta && transformFileMeta._processingStatus === 'processed') {
+      streamS3ToResponse(ctx, transformFileMeta);
+      return;
+    }
+
+    // Transform if file not proccessed yet, or this is new transformation
+    const transformResult = await transformImage({
+      ctx,
+      transformQuery: transform,
+      storageFileId: fileMeta.storage.fileId,
+    });
+
+    if (transformFileMeta) {
+      streamToResponse(ctx, transformFileMeta, transformResult.fileStream);
+    } else {
+      transformFileMeta = await createTransformationMeta({
+        transformQuery: transform,
+        transformHash,
+        appliedTransformations: transformResult.appliedTransformations,
+        originalFileMeta: fileMeta,
+      });
+
+      streamToResponse(ctx, transformFileMeta, transformResult.fileStream);
+    }
+
+    return;
   }
 
-  ctx.type = mime.contentType(fileId) || 'application/octet-stream';
-  ctx.body = fileStream;
+  // Do not transform already transformed files to avoid
+  // large parent->child trees and keep it simpler
+  if (transform) {
+    ctx.status = 400;
+    ctx.body = 'Transformations can be applied only to the original images';
+    return;
+  }
+
+  // If file already proccessed by background job stream it
+  if (fileMeta._processingStatus === 'processed') {
+    streamS3ToResponse(ctx, fileMeta);
+    return;
+  }
+
+  // use transformation params from metadata to transform on the fly, while background job busy
+  const originalFileMeta = await storage.getFileMeta({ fileId: fileMeta.originalId });
+  const transformResult = await transformImage({
+    ctx,
+    transformQuery: fileMeta.transformQuery,
+    storageFileId: originalFileMeta.storage.fileId,
+  });
+
+  streamToResponse(ctx, fileMeta, transformResult.fileStream);
 };

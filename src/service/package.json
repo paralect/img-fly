@@ -37,6 +37,7 @@
     "koa-router": "7.4.0",
     "koa-validate": "1.0.7",
     "lodash": "4.17.5",
+    "md5": "2.2.1",
     "mime-types": "2.1.18",
     "nodemon": "1.17.2",
     "s3-streams": "0.3.0",

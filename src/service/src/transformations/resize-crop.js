@@ -6,9 +6,9 @@ const throwInvalidError = () => {
     Make sure that transformation query has all params: 
     crop-strategy_attention or crop-gravity_center).
     Read more at: http://sharp.pixelplumbing.com/en/stable/api-resize/#crop`;
-  
+
   throw new Error(errorMessage);
-}
+};
 
 const parseQuery = (query) => {
   const transformParts = query.split('-');
@@ -21,17 +21,17 @@ const parseQuery = (query) => {
     return throwInvalidError();
   }
 
-  const paramValue = paramsParts[1];
+  const { 1: paramValue } = paramsParts;
   switch (paramsParts[0]) {
     case 'gravity': {
-      if (!sharp.gravity.hasOwnProperty(paramValue)) {
+      if (!Object.prototype.hasOwnProperty.call(sharp.gravity, paramValue)) {
         return throwInvalidError();
       }
 
       return sharp.gravity[paramValue];
     }
     case 'strategy': {
-      if (!sharp.strategy.hasOwnProperty(paramValue)) {
+      if (!Object.prototype.hasOwnProperty.call(sharp.strategy, paramValue)) {
         return throwInvalidError();
       }
 
@@ -39,18 +39,20 @@ const parseQuery = (query) => {
     }
     default:
       return sharp.gravity.center;
-     
   }
-}
+};
 
-const apply = (query, sharp) => {
+const apply = (query, sharpObject) => {
   const transformParams = parseQuery(query);
   logger.info(`Applying [crop] transformation with params: ${JSON.stringify(transformParams)}`);
 
-  return sharp.crop(transformParams);
+  return {
+    sharp: sharpObject.crop(transformParams),
+    params: transformParams,
+  };
 };
 
 module.exports = {
   name: 'crop',
-  apply: apply,
-}
+  apply,
+};

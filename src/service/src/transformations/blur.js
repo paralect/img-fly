@@ -29,11 +29,12 @@ const apply = (query, sharp) => {
   const options = parseQuery(query);
   logger.info(`Applying [blur] with options: ${JSON.stringify(options)}`);
 
-  if (options.sigma) {
-    return sharp.blur(options.sigma);
-  }
-  
-  return sharp.blur();
+  return {
+    sharp: options.sigma
+      ? sharp.blur(options.sigma)
+      : sharp.blur(),
+    params: options,
+  };
 };
 
 module.exports = {

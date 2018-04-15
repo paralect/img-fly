@@ -5,21 +5,30 @@ const throwInvalidTransformation = (name) => {
   throw new Error(errorMessage);
 };
 
-const applyTransformations = (query, originalSharp) => {
+const applyTransformations = (transformQuery, originalSharp) => {
   let sharp = originalSharp;
-  const transformationParts = query.split('+');
+  const transformationParts = transformQuery.split('+');
+  const appliedTransformations = {};
   transformationParts.forEach((transformPart) => {
     const parts = transformPart.split('-');
-    const { 0: transformationName } = parts;
+    let { 0: transformationName } = parts;
+    transformationName = transformationName.toLowerCase();
 
     if (!(transformationName in transformationMap)) {
       throwInvalidTransformation(transformationName);
     }
 
-    sharp = transformationMap[transformationName](transformPart, sharp);
+    const transformResult =
+      transformationMap[transformationName](transformPart, sharp);
+    sharp = transformResult.sharp;
+
+    appliedTransformations[transformationName] = transformResult.params;
   });
 
-  return sharp;
+  return {
+    sharp,
+    appliedTransformations,
+  };
 };
 
 module.exports.apply = applyTransformations;
