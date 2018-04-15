@@ -5,4 +5,5 @@ module.exports = {
     collection: 'img-fly-files',
   },
   apiUrl: 'http://localhost:3001',
+  debug: true,
 };

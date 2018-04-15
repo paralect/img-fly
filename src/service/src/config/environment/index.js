@@ -21,6 +21,7 @@ let base = {
     collection: process.env.IMG_FLY_MONGO_COLLECTION,
   },
   apiUrl: process.env.IMG_FLY_API_URL,
+  debug: process.env.IMG_FLY_DEBUG,
 };
 
 const envConfig = require(`./${env}.js`); // eslint-disable-line
