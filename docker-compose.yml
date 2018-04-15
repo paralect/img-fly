@@ -4,7 +4,7 @@ services:
     command: mongod
     image: mongo:3.6.3
     ports:
-      - "27017:27017" # map port to none standard port, to avoid conflicts with locally installed mongodb.
+      - "27018:27017" # map port to none standard port, to avoid conflicts with locally installed mongodb.
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   service:
@@ -14,7 +14,7 @@ services:
     volumes:
       - "./src/service/src:/app/src"
     ports:
-      - "3001:3001"
+      - "4001:3001"
     env_file:
       - .env
     depends_on:

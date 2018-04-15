@@ -3,8 +3,8 @@ const db = require('@paralect/node-mongo').connect(config.storage.connection);
 const fileSchema = require('./mongo.file.schema');
 
 const fileService = db.createService(config.storage.collection, fileSchema);
-fileService.ensureIndex({ transformHash: 1 }, { unique: true });
-fileService.ensureIndex({ _processingStatus: 1, createdOn: 1 }, { unique: true });
+fileService.ensureIndex({ transformHash: 1 });
+fileService.ensureIndex({ _processingStatus: 1, createdOn: 1 });
 
 module.exports = {
   createFilesMeta: async function createFilesMeta(files) {
@@ -14,11 +14,11 @@ module.exports = {
         name: file.name,
         createdOn: new Date(),
         originalId: file.originalId || null,
-        transformHash: file.transformHash || null,
         transformQuery: file.transformQuery || null,
         storage: file.storage,
       };
       if (file.transformHash) {
+        result.transformHash = file.transformHash;
         result._processingStatus = 'new'; // go ahead for the background job
       }
 

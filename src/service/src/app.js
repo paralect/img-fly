@@ -22,4 +22,6 @@ app.listen(config.port, () => {
   logger.warn(`Api server listening on ${config.port}, in ${process.env.NODE_ENV} mode`);
 });
 
+logger.info(config);
+
 module.exports = app;
