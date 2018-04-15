@@ -27,7 +27,7 @@ const parseQuery = (query) => {
 
 const apply = (query, sharp) => {
   const options = parseQuery(query);
-  logger.info(`Applying [blur] with options: ${JSON.stringify(options)}`);
+  logger.debug(`Applying [blur] with options: ${JSON.stringify(options)}`);
 
   return {
     sharp: options.sigma

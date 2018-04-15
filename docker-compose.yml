@@ -21,6 +21,19 @@ services:
       - mongo
     links: 
       - mongo
+  worker:
+    build:
+      context: "./src/service"
+      dockerfile: Dockerfile.dev
+    command: npm run development-worker
+    volumes:
+      - "./src/service/src:/app/src"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    links: 
+      - mongo
   ui-demo:
     build:
       context: "./src/ui-demo"

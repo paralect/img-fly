@@ -1,7 +1,7 @@
 const { logger } = global;
 
 const apply = (query, sharp) => {
-  logger.info('Applying [max] transformation');
+  logger.debug('Applying [max] transformation');
 
   return {
     sharp: sharp.max(),

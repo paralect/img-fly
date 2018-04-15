@@ -21,7 +21,6 @@ const applyTransformations = (transformQuery, originalSharp) => {
     const transformResult =
       transformationMap[transformationName](transformPart, sharp);
     sharp = transformResult.sharp;
-
     appliedTransformations[transformationName] = transformResult.params;
   });
 

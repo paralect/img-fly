@@ -13,9 +13,11 @@
   ],
   "scripts": {
     "start": "node src/app.js",
+    "start-worker": "node src/worker/index.js",
     "test": "run-s test:**",
     "test:eslint": "eslint ./src",
     "development": "NODE_ENV=development nodemon --watch src src/app.js",
+    "development-worker": "NODE_ENV=development nodemon --watch src/worker src/worker/index.js",
     "format": "prettier-eslint --write \"src/**/*.js\""
   },
   "dependencies": {

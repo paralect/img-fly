@@ -22,6 +22,7 @@ async function transformImage({ ctx, transformQuery, storageFileId }) {
   } catch (err) {
     ctx.status = 400;
     ctx.body = err.message;
+    return false;
   }
 
   return {
@@ -128,6 +129,9 @@ exports.getFile = async (ctx, next) => {
       transformQuery: transform,
       storageFileId: fileMeta.storage.fileId,
     });
+    if (!transformResult) {
+      return;
+    }
 
     if (transformFileMeta) {
       streamToResponse(ctx, transformFileMeta, transformResult.fileStream);
@@ -166,6 +170,9 @@ exports.getFile = async (ctx, next) => {
     transformQuery: fileMeta.transformQuery,
     storageFileId: originalFileMeta.storage.fileId,
   });
+  if (!transformResult) {
+    return;
+  }
 
   streamToResponse(ctx, fileMeta, transformResult.fileStream);
 };

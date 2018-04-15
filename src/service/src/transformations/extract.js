@@ -34,7 +34,7 @@ const parseQuery = (query) => {
 
 const apply = (query, sharp) => {
   const transformParams = parseQuery(query);
-  logger.info(`Applying [extract] transformation with params: ${JSON.stringify(transformParams)}`);
+  logger.debug(`Applying [extract] transformation with params: ${JSON.stringify(transformParams)}`);
 
   return {
     sharp: sharp.extract(transformParams),

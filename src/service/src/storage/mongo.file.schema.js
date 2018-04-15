@@ -16,8 +16,9 @@ const fileSchema = {
     .allow(null),
   _processingStatus: Joi.string()
     .optional()
-    .valid(['new', 'processed', 'toDetele']),
+    .valid(['new', 'processed', 'toDetele', 'failed', 'inProgress']),
   _processedOn: Joi.date()
+    .allow(null)
     .optional(),
   storage: {
     type: Joi.string().valid(['s3']),

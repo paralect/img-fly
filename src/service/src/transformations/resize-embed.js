@@ -1,7 +1,7 @@
 const { logger } = global;
 
 const apply = (query, sharp) => {
-  logger.info('Applying [embed] transformation');
+  logger.debug('Applying [embed] transformation');
 
   return {
     sharp: sharp.embed(),

@@ -44,7 +44,7 @@ const parseQuery = (query) => {
 
 const apply = (query, sharpObject) => {
   const transformParams = parseQuery(query);
-  logger.info(`Applying [crop] transformation with params: ${JSON.stringify(transformParams)}`);
+  logger.debug(`Applying [crop] transformation with params: ${JSON.stringify(transformParams)}`);
 
   return {
     sharp: sharpObject.crop(transformParams),

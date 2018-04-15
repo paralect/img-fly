@@ -5,7 +5,7 @@ const throwInvalidError = () => {
     Make sure that transformation query has all params: 
     resize-width_100,height_200 (height or width could be omited for auto-scale).
     Read more at: http://sharp.pixelplumbing.com/en/stable/api-resize/#resize`;
-  
+
   throw new Error(errorMessage);
 };
 
@@ -22,27 +22,28 @@ const parseQuery = (query) => {
 
   const result = {};
   if (paramsParts.length === 2) {
-    for(const param of paramsParts) {
+    paramsParts.forEach((param) => {
       const paramParts = param.split('_');
       if (paramParts.length !== 2) {
-        return throwInvalidError();
+        throwInvalidError();
+        return;
       }
 
       result[paramParts[0]] = parseInt(paramParts[1], 10);
-    }
+    });
   } else {
     const paramParts = paramsParts[0].split('_');
     result[paramParts[0]] = parseInt(paramParts[1], 10);
 
     if (paramParts[0] === 'height') {
-      result['width'] = null;
+      result.width = null;
     } else {
-      result['height'] = null;
+      result.height = null;
     }
   }
 
   return result;
-}
+};
 
 const apply = (query, sharp) => {
   const transformParams = parseQuery(query);
