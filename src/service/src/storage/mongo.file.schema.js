@@ -3,6 +3,8 @@ const Joi = require('joi');
 const fileSchema = {
   _id: Joi.string(),
   createdOn: Joi.date(),
+  lastAccessOn: Joi.date()
+    .optional(),
   name: Joi.string(),
   originalId: Joi.string()
     .allow(null),

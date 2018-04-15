@@ -8,6 +8,8 @@ const s3UploadService = require('services/s3Upload.service');
 const transformService = require('services/transform.service');
 const fileService = require('services/file.service');
 
+const { logger } = global;
+
 async function transformImage({ ctx, transformQuery, storageFileId }) {
   let fileStream = await s3UploadService.getFileStream(storageFileId);
   let transformObject = sharp();
@@ -73,10 +75,18 @@ function getContentType(fileId) {
   return mime.contentType(fileId) || 'application/octet-stream';
 }
 
+function trackLastAccessAsync(fileId) {
+  storage.trackLastAccess({ fileId })
+    .catch((err) => {
+      logger.warn(`Unable to update last acccess date for the file: [${fileId}].`);
+    });
+}
+
 async function streamS3ToResponse(ctx, fileMeta) {
   setFileUrlHeader(ctx, { _id: fileMeta._id, name: fileMeta.name });
   ctx.type = getContentType(fileMeta.storage.fileId);
   ctx.body = await s3UploadService.getFileStream(fileMeta.storage.fileId);
+  trackLastAccessAsync(fileMeta._id);
 }
 
 function streamToResponse(ctx, fileMeta, fileStream) {

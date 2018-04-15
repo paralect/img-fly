@@ -3,6 +3,7 @@ const db = require('@paralect/node-mongo').connect(config.storage.connection);
 const fileSchema = require('./mongo.file.schema');
 
 const fileService = db.createService(config.storage.collection, fileSchema);
+fileService.ensureIndex({ transformHash: 1 }, { unique: true });
 
 module.exports = {
   createFilesMeta: async function createFilesMeta(files) {
@@ -24,6 +25,14 @@ module.exports = {
     });
 
     return fileService.create(filesMeta);
+  },
+
+  trackLastAccess({ fileId }) {
+    return fileService.atomic.update({ _id: fileId }, {
+      $set: {
+        lastAccessOn: new Date(),
+      },
+    });
   },
 
   // This method is slower than createFilesMeta
