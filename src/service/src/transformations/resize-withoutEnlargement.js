@@ -10,6 +10,6 @@ const apply = (query, sharp) => {
 };
 
 module.exports = {
-  name: 'withoutEnlargement',
+  name: 'withoutenlargement',
   apply,
 };

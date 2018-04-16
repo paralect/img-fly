@@ -44,22 +44,23 @@ module.exports = {
     }
 
     const update = {
-      $set: {
+      $setOnInsert: {
         _id: file._id,
         name: file.name,
         createdOn: new Date(),
-        originalId: file.originalId || null,
-        transformHash: file.transformHash || null,
-        transformQuery: file.transformQuery || null,
+        originalId: file.originalId,
+        transformHash: file.transformHash,
+        transformQuery: file.transformQuery,
+        transformName: file.transformName || null,
         storage: file.storage,
+        _processingStatus: 'new', // go ahead for the background job
       },
     };
 
-    if (file.transformHash) {
-      update.$set._processingStatus = 'new'; // go ahead for the background job
-    }
-
-    return fileService.findOneAndUpdate({ transformHash: file.transformHash }, update);
+    return fileService.atomic.findOneAndUpdate({ transformHash: file.transformHash }, update, {
+      upsert: true,
+      returnNewDocument: true,
+    });
   },
 
   getFileMeta: ({ fileId }) => {
@@ -114,7 +115,7 @@ module.exports = {
       };
       const update = {
         $set: {
-          _processedOn: Date.now(),
+          _processedOn: new Date(),
           _processingStatus: 'failed',
         },
       };
@@ -130,7 +131,7 @@ module.exports = {
       };
       const update = {
         $set: {
-          _processedOn: Date.now(),
+          _processedOn: new Date(),
           _processingStatus: 'processed',
         },
       };

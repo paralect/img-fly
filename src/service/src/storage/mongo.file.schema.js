@@ -14,6 +14,10 @@ const fileSchema = {
     .allow(null),
   transformQuery: Joi.string()
     .allow(null),
+  // optional, user friendly transformation name
+  transformName: Joi.string()
+    .optional()
+    .allow(null),
   _processingStatus: Joi.string()
     .optional()
     .valid(['new', 'processed', 'toDetele', 'failed', 'inProgress']),

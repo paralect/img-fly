@@ -18,6 +18,7 @@ async function transformImage({ ctx, transformQuery, storageFileId }) {
   try {
     transformResult = transformService.apply(transformQuery, transformObject);
     transformObject = transformResult.sharp;
+
     fileStream = fileStream.pipe(transformObject);
   } catch (err) {
     ctx.status = 400;
@@ -34,6 +35,7 @@ async function transformImage({ ctx, transformQuery, storageFileId }) {
 async function createTransformationMeta({
   transformQuery,
   transformHash,
+  transformName,
   appliedTransformations,
   originalFileMeta,
 }) {
@@ -59,13 +61,14 @@ async function createTransformationMeta({
     originalId: originalFileMeta._id,
     transformQuery,
     transformHash,
+    transformName,
     storage: {
       type: 's3',
       fileId: fileIdWithExt,
     },
   };
 
-  return storage.createFilesMeta([file]);
+  return storage.createOrUpdateFileMeta(file);
 }
 
 function setFileUrlHeader(ctx, { _id, name }) {
@@ -81,6 +84,10 @@ function trackLastAccessAsync(fileId) {
     .catch((err) => {
       logger.warn(`Unable to update last acccess date for the file: [${fileId}].`);
     });
+}
+
+function getTransformHash(originalFileId, transform) {
+  return md5(`${originalFileId}${transform}`);
 }
 
 async function streamS3ToResponse(ctx, fileMeta) {
@@ -112,7 +119,7 @@ exports.getFile = async (ctx, next) => {
       return;
     }
 
-    const transformHash = md5(`${fileMeta._id}${transform}`);
+    const transformHash = getTransformHash(fileMeta._id, transform);
 
     // check file with such transformation already exists
     let transformFileMeta = await storage.getFileMetaByHash({ transformHash });
@@ -175,4 +182,66 @@ exports.getFile = async (ctx, next) => {
   }
 
   streamToResponse(ctx, fileMeta, transformResult.fileStream);
+};
+
+exports.createFile = async (ctx, next) => {
+  const { id } = ctx.params;
+  const { transformTasks } = ctx.request.body;
+
+  const originalFileMeta = await storage.getFileMeta({ fileId: id });
+  if (!originalFileMeta) {
+    ctx.status = 404;
+    return;
+  }
+
+  const errors = [];
+  const fileTransforms = [];
+  // validate if transformations possible before storing them
+  transformTasks.forEach((task) => {
+    const { transform, name } = task;
+    try {
+      const transformResult = transformService.apply(transform, sharp());
+      fileTransforms.push({
+        appliedTransformations: transformResult.appliedTransformations,
+        transform,
+        name,
+      });
+    } catch (err) {
+      errors.push({
+        transform,
+        error: err.message,
+      });
+    }
+  });
+
+  if (errors.length > 0) {
+    ctx.status = 400;
+    ctx.body = {
+      errors,
+    };
+    return;
+  }
+
+  const createFiles = fileTransforms.map((fileTransform) => {
+    return createTransformationMeta({
+      transformQuery: fileTransform.transform,
+      transformHash: getTransformHash(originalFileMeta._id, fileTransform.transform),
+      transformName: fileTransform.name,
+      appliedTransformations: fileTransform.appliedTransformations,
+      originalFileMeta,
+    });
+  });
+
+  const files = await Promise.all(createFiles);
+
+  ctx.body = {
+    files: files.map((file) => {
+      return {
+        _id: file._id,
+        url: fileService.getFileUrl(file._id, file.name),
+        name: file.name,
+        transformName: file.transformName,
+      };
+    }),
+  };
 };
