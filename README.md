@@ -12,29 +12,22 @@
 [![Follow](https://img.shields.io/twitter/follow/paralect.svg?style=social&label=Follow)](https://twitter.com/paralect)
 [![Tweet](https://img.shields.io/twitter/url/https/github.com/paralect/img-fly.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20Img%20Fly%20%F0%9F%A6%8B%20%E2%80%94%20an%20open-source,%20docker%20based%20service%20for%20uploading%20and%20manipulating%20images%20on%20a%20fly%20https://github.com/paralect/img-fly)
 
-Docker based service for uploading and transforming images on the fly 🦋. 
+Docker based service for uploading and transforming images on the fly 🦋. Based on native, ultra fast [Sharp](http://sharp.pixelplumbing.com/en/stable/performance/#the-task) and [Amazon S3](https://aws.amazon.com/s3/).
 
-## An idea
+## Features
 
-Img Fly is a simple service which allow uploading and manipulating images on a fly. 
-1. As a developer I can upload my image to the `/upload` endpoint. 
-2. As a developer I can specify my Amazon S3 bucket using environment variables.
-3. As a developer I can point use `/w_200/puppy.png` endpoint to resize image width to be 200px. 
-4. Once image processed it is get cached on S3, when image is not used for over 30 days (via config) image should be deleted on s3.
-5. As a developer I can upload images directly from a browser. 
+* 🔥️ **Transform images on the fly** Upload image and apply transformation by adding them to the url. Similar to [Cloudinary](https://cloudinary.com/).
+* 😍 **Resize, Crop, Face detection** and other image transformations. Based on [Sharp](http://sharp.pixelplumbing.com/en/stable/install/)
+* 🙀 **Amazon S3 as file storage** we store original uploads and all transformations over to your S3 bucket.
+* 🤗 **Upload directly from client app.** .
+* ️⚡️ **Easy to use** Img Fly is a Node.JS based microservice, shipped in Docker container.
+* 💰 **Automated S3 storage cleanup.** We cleanup your S3 bucket if file isn't accessed for over 30 days. ImgFly saves your money. *(planned)*
+* 👮‍♂️ **Secure** — we keep all uploads and file access secure by verifying `md5(resourceId,imgFlySecretKey)`. *(planned)*
 
-⚠️ — at the moment 1-3 is implemented. Use with caution, the service is still in early days. All transformations are applied on the fly and do not persisted to the S3 bucket.
-
-Basic security: 
-1. To secure uploads we could use simple `md5(secret, id)` approach. As a developer I generate simple imgFlyToken from a secret (configured in a config) and some id (that could be current userId, resourceId or whatever else)
-2. By default, if strict security isn't required we could return direct S3 url as a header for `/w_200/puppy.png` request. 
-3. If security is an issue, we could return URL as a header with `md5(secret, imageName)`
-
-Tools: 
-1. Image processing based on [sharp](https://github.com/lovell/sharp)
-2. Amazon S3 by default as file storage (file system later on).
 
 ## Getting Started
+
+### Play around
 
 1. Clone this repo
 2. Create `.env` file with Amazon s3 credentials (see [.env.example](./.env.example)).
@@ -45,15 +38,45 @@ Tools:
 Extract + Resize example:
 `http://localhost:3001/5ac0bb5fab7ce4028e879d03/extract-left_0,top_30,width_400,height_300+resize-width_300/nice_file_name.png`
 
+### Add ImgFly to your project
 
+ImgFly shipped as [Docker container](https://hub.docker.com/r/paralect/img-fly/tags/). If you already using [docker-compose for your project](https://github.com/paralect/docker-compose-starter) it won't take more than 5 minutes to install and start using ImgFly. 
+
+You'll need to add following to your docker-compose file. [Full installation and usage guide](./INSTALL.md)
+```yml
+img-fly:
+    image: paralect/img-fly:v0.2.2
+    ports:
+      - "3003:3001"
+    environment:
+      NODE_ENV: "production"
+      IMG_FLY_AWS_SECRET_KEY: "YOUR AWS SECRET"
+      IMG_FLY_AWS_ACCESS_KEY: "YOUR AWS ACCESS KEY"
+      IMG_FLY_AWS_S3_REGION: "YOUR AWS REGION"
+      IMG_FLY_AWS_S3_BUCKET: "YOUR BUCKET NAME"
+      IMG_FLY_MONGO_CONNECTION: "mongodb://mongo:27017/img-fly-dev"
+      IMG_FLY_MONGO_COLLECTION: "img-fly_files"
+      IMG_FLY_API_URL: "http://localhost:3003"
+      IMG_FLY_DEBUG: "true"
+```
 ### Supported transformations
 
 1. [Extract](http://sharp.pixelplumbing.com/en/stable/api-operation/#extract)
 2. [Resize](http://sharp.pixelplumbing.com/en/stable/api-resize/#resize)
-3. [Crop](http://sharp.pixelplumbing.com/en/stable/api-resize/#crop)
+    - [Crop](http://sharp.pixelplumbing.com/en/stable/api-resize/#crop)
+    - [Embed](http://sharp.pixelplumbing.com/en/stable/api-resize/#embed)
+    - [Max](http://sharp.pixelplumbing.com/en/stable/api-resize/#max)
+    - [withoutEnlargement](http://sharp.pixelplumbing.com/en/stable/api-resize/#withoutEnlargement)
+3. [Extract](http://sharp.pixelplumbing.com/en/stable/api-operation/#extract)
+4. [Blur](http://sharp.pixelplumbing.com/en/stable/api-operation/#blur)
+5. [toFormat](http://sharp.pixelplumbing.com/en/stable/api-output/#toformat)
+6. [Grayscale filter](http://sharp.pixelplumbing.com/en/stable/api-colour/#grayscale)
+
+[All transformations (code)](https://github.com/paralect/img-fly/tree/master/src/service/src/transformations)
 
 Feel free to submit PR's with more transformations. You'll need to implement a function which maps query params to the [sharp](http://sharp.pixelplumbing.com/) function params.
 
+#### Building transfomration query
 We use following rules to form query params. 
 1. `+` is used to combine multiple transformations.
 2. `-` is used as separator between transformation name and params.
