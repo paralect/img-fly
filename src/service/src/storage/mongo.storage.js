@@ -16,6 +16,7 @@ module.exports = {
         originalId: file.originalId || null,
         transformQuery: file.transformQuery || null,
         storage: file.storage,
+        imageInfo: file.imageInfo || null,
       };
       if (file.transformHash) {
         result.transformHash = file.transformHash;
