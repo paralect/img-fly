@@ -63,12 +63,28 @@ module.exports = {
     });
   },
 
+  updateImageInfo: function updateImageInfo({ _id, info }) {
+    return fileService.atomic.findOneAndUpdate({ _id }, {
+      $set: {
+        imageInfo: info,
+      },
+    });
+  },
+
   getFileMeta: ({ fileId }) => {
     const query = {
       _id: fileId,
     };
 
     return fileService.findOne(query);
+  },
+
+  getFileTransfomationsMeta: ({ originalId }) => {
+    const query = {
+      originalId,
+    };
+
+    return fileService.find(query);
   },
 
   getFileMetaByHash: ({ transformHash }) => {

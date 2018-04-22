@@ -18,6 +18,12 @@ const fileSchema = {
   transformName: Joi.string()
     .optional()
     .allow(null),
+  imageInfo: {
+    width: Joi.number()
+      .optional(),
+    height: Joi.number()
+      .optional(),
+  },
   _processingStatus: Joi.string()
     .optional()
     .valid(['new', 'processed', 'toDetele', 'failed', 'inProgress']),

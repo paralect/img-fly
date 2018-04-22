@@ -245,3 +245,21 @@ exports.createFile = async (ctx, next) => {
     }),
   };
 };
+
+exports.getFileMetadata = async (ctx, next) => {
+  const { id } = ctx.params;
+  logger.info(id);
+
+  const metadata = await storage.getFileMeta({ fileId: id });
+  if (!metadata) {
+    ctx.status = 404;
+    return;
+  }
+
+  if (metadata.originalId === null) {
+    const transformedFiles = await storage.getFileTransfomationsMeta({ originalId: metadata._id });
+    metadata.transformedFiles = transformedFiles.results;
+  }
+
+  ctx.body = metadata;
+};
