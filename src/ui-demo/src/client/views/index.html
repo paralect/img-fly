@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Index HTML</title>
+    <script src="https://use.typekit.net/yon8ycp.js"></script>
+    <script>window.Typekit.load();</script>
   </head>
   <body>
     {{#unless isDev}}
@@ -30,7 +32,7 @@
                 -ms-flex-pack: center;
                     justify-content: center;
           }
-  
+
           .stack {
             width: 400px;
             height: 300px;
@@ -57,7 +59,7 @@
             -webkit-animation: bounceInLeft 1s;
                     animation: bounceInLeft 1s;
           }
-  
+
           @-webkit-keyframes bounceInLeft {
             0%, 60%, 75%, 90%, 100% {
               -webkit-animation-timing-function: cubic-bezier(.215,.61,.355,1);
@@ -115,7 +117,7 @@
             }
           }
         </style>
-  
+
         <div class="stack">
           Loading..
         </div>
@@ -130,7 +132,7 @@
       window.user = {{{json user}}};
       window.loadingTime = Date.now();
     </script>
-    
+
     {{#if isDev}}
       <script src="/static/main.js"></script>
     {{/if}}

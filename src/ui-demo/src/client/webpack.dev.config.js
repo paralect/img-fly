@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 
+const context = path.resolve(__dirname, './');
+
 module.exports = {
   mode: 'development',
 
@@ -18,14 +20,34 @@ module.exports = {
     filename: '[name].js',
   },
 
-  context: path.resolve(__dirname, './'),
+  context,
 
   module: {
     rules: [
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        loader: 'babel-loader',
+        options: {
+          plugins: [
+            [
+              'react-css-modules',
+              {
+                context,
+                exclude: 'node_modules',
+                filetypes: {
+                  '.pcss': {
+                    syntax: 'postcss',
+                    plugins: ['postcss-nested'],
+                  },
+                },
+                generateScopedName: '[local]_[hash:base64:5]',
+                webpackHotModuleReloading: true,
+                handleMissingStyleName: 'ignore',
+              },
+            ],
+          ],
+        },
       },
       {
         test: /\.pcss$/,

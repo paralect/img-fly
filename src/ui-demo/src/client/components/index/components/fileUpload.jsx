@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import { apiClient } from 'helpers/api';
 
+import './fileUpload.styles.pcss';
+
 class FileUplaod extends Component {
   state = {
     originalUrl: 'Upload any image file..',
@@ -33,7 +35,7 @@ class FileUplaod extends Component {
   render() {
     return (
       <div>
-        <Dropzone onDrop={files => this.onDrop(files)}>
+        <Dropzone styleName="dropzone" onDrop={files => this.onDrop(files)}>
           <div>Try dropping some files here, or click to select files to upload.</div>
         </Dropzone>
         <div>

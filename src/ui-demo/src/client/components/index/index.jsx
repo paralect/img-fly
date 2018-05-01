@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import type { Node } from 'react';
 import FileUpload from './components/fileUpload';
+import TransformationExamples from './components/transformationExamples';
 
 import './index.styles.pcss';
 
@@ -11,6 +12,7 @@ export default class Index extends Component<*> {
     return (
       <div>
         <FileUpload />
+        <TransformationExamples />
       </div>
     );
   }
