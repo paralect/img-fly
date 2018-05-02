@@ -78,20 +78,23 @@ class TransformationExamples extends Component {
             <header styleName="card__header">
               <p styleName="card__title">Avatar uploading with face detection</p>
               <p styleName="card__subtitle">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Maecenas ut metus molestie, sagittis libero vitae, tempor odio.
+                Your application may support avatar uploading or displaying
+                profile pictures from different social networks.
+                With face detection transformation you can easily manipulate user
+                photos so they will perfectly fit into the design of your web or
+                mobile application.
               </p>
             </header>
-            <div styleName="card__images-container card__images-container--arrow">
-              <div styleName="card__image-container">
-                <img styleName="card__image" src="http://localhost:4001/5ad8914064899b001f43cfb5/stock-photo-242845961.jpg" alt="" />
+            <div styleName="card__images-container card__images-container--avatar-arrow">
+              <div styleName="card__photo-avatar-container">
+                <img styleName="card__image" src={require('static/images/photoForAvatar.jpg')} alt="" />
               </div>
-              <div styleName="card__image-container">
-                <img styleName="card__image" src="http://localhost:4001/5ad8914064899b001f43cfb5/grayscale/stock-photo-242845961.jpg" alt="" />
+              <div styleName="card__avatar-container">
+                <img styleName="card__image" src={require('static/images/avatar.jpg')} alt="" />
               </div>
             </div>
             <div styleName="card__footer">
-                http://localhost:3001/5ac0bb5fab7ce4028e879d03/extract-left_0,top_30,width_400,height_300+resize-width_300/nice_file_name.png
+                http://localhost:4001/5ae999f4448e13001e0c2593/resize-width_300,height_300+max+crop-strategy_attention/stock-photo-256101897.jpg
             </div>
           </article>
 

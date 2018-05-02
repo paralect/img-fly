@@ -42,26 +42,28 @@ a {
 .card__images-container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   flex-direction: row;
   position: relative;
 }
 
-.card__images-container--arrow::before {
+.card__images-container--avatar-arrow::before {
   position: absolute;
-  top: 50%; left: 50%;
+  top: 50%; left: 65%;
   transform: translate(-50%, -50%);
 
   content: '';
   display: block;
   width: 40px; height: 40px;
   border-radius: 100vmax;
-  background-color: #F0F0F0;
+  border: 1px solid #e6e6e6;
+  background-color: #e5e5e5;
   opacity: 0.9;
 }
 
-.card__images-container--arrow::after {
+.card__images-container--avatar-arrow::after {
   position: absolute;
-  top: 50%; left: 50%;
+  top: 50%; left: 65%;
   transform: translate(calc(-50% * 1.41), -50%) rotate(45deg);
 
   content: '';
@@ -79,6 +81,10 @@ a {
 .card__single-image-container {
   width: 50%;
   margin: 0 auto;
+}
+
+.card__photo-avatar-container {
+  width: 600px;
 }
 
 .card__image {
