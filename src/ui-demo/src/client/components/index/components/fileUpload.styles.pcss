@@ -1,6 +1,43 @@
+.file-upload {
+  margin-bottom: 60px;
+
+  &__result {
+    padding-left: 20px;
+  }
+
+  &__title {
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 20px;
+  }
+
+  &__text {
+    font-size: 20px;
+    font-weight: 300;
+    margin-bottom: 10px;
+
+    &--bold {
+      font-weight: 400;
+    }
+  }
+}
+
 .dropzone {
   width: 1000px;
   margin: 0 auto;
-  height: 100px;
+  margin-bottom: 20px;
+  height: 200px;
   border: 2px dashed #e6e6e6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &__text {
+    font-size: 20px;
+    font-weight: 300;
+  }
 }

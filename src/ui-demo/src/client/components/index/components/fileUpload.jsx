@@ -34,24 +34,32 @@ class FileUplaod extends Component {
 
   render() {
     return (
-      <div>
+      <section styleName="file-upload">
         <Dropzone styleName="dropzone" onDrop={files => this.onDrop(files)}>
-          <div>Try dropping some files here, or click to select files to upload.</div>
+          <div styleName="dropzone__text">Try dropping some files here, or click to select files to upload.</div>
         </Dropzone>
-        <div>
-          <h3>Uploaded file url</h3>
+        <div styleName="file-upload__result">
+          <div styleName="file-upload__title">Uploaded file url</div>
           {this.state.transformUrl ?
             <div>
-              <span><b>Original file url: </b> <a href={this.state.originalUrl} target="_blank">{this.state.originalUrl}</a></span> <br />
-              <span><b>Sample on the fly transformation url</b>: <a href={this.state.transformUrl} target="_blank">{this.state.transformUrl}</a></span> <br />
-              <span><b>Tip:</b> copy/paste resize transformation url and try chaning values</span>
+              <div styleName="file-upload__text">
+                <span styleName="file-upload__text--bold">Original file url: </span>
+                <a href={this.state.originalUrl} target="_blank">{this.state.originalUrl}</a>
+              </div>
+              <div styleName="file-upload__text">
+                <span styleName="file-upload__text--bold">Sample on the fly transformation url: </span>
+                <a href={this.state.transformUrl} target="_blank">{this.state.transformUrl}</a>
+              </div>
+              <div styleName="file-upload__text">
+                <span styleName="file-upload__text--bold">Tip: </span>copy/paste resize transformation url and try chaning values
+              </div>
             </div> :
-            <span>
+            <span styleName="file-upload__text">
               Upload any image file..
             </span>
           }
         </div>
-      </div>
+      </section>
     );
   }
 }

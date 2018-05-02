@@ -4,51 +4,70 @@ import './transformationExamples.styles.pcss';
 
 class TransformationExamples extends Component {
   state = {
+    showFullImage: false,
+  }
+
+  onPreviewImageClick = (image, size) => {
+    this.setState({
+      ...this.state,
+      showFullImage: true,
+      fullImageName: image,
+      fullImageSize: size,
+    });
+  }
+
+  onImagePreviewClose = () => {
+    this.setState({
+      showFullImage: false,
+    });
+  }
+
+  onImagePreviewOverlayClick = (event) => {
+    if (this.modal) {
+      if (!this.modal.contains(event.target)) {
+        this.setState({
+          showFullImage: false,
+        });
+      }
+    }
   }
 
   render() {
+    const { showFullImage, fullImageName, fullImageSize } = this.state;
+
     return (
       <main styleName="demo-page">
-        <section styleName="demo-page__caption">
-          <div styleName="caption__text">
-            <span styleName="caption__title">Img Fly</span>
-            <span styleName="caption__subtitle">Upload and transform your images on the fly</span>
-          </div>
-        </section>
         <section>
           <article styleName="demo-page__card">
             <header styleName="card__header">
               <p styleName="card__title">Image preview</p>
               <p styleName="card__subtitle">
-                Resize your image and reduce its quality for preview. The loss of visual quality is barely noticeable to the human eye, but the size of the image is considerably less.
-                This transformation can be used for creating galleries or lists of images. Once you click on the image, picture with a real size and quality is shown.
+                Resize your image and reduce its quality for preview.
+                The loss of visual quality is barely noticeable to the human eye,
+                but the size of the image is considerably less.
+                This transformation can be used for creating galleries or lists of images.
+                Once you click on the image, picture with a real size and quality is shown.
               </p>
             </header>
             <div styleName="card__images-container">
-              <a>
-                <div styleName="card__preview-image">
-                  <img styleName="card__image" src="http://localhost:4001/5ad9b61564899b001f43cfc1/resize-width_330,height_330+crop-gravity_center+toFormat-jpeg,quality_50/stock-photo-240037471.jpg" alt="" />
-                  <div styleName="preview-image__text">
-                    Size: 12.3 KB
-                  </div>
+              <div styleName="card__preview-image" onClick={() => this.onPreviewImageClick('picture1', '72.3')} role="presentation">
+                <img styleName="card__image" src={require('static/images/smallPicture1.jpg')} alt="" />
+                <div styleName="preview-image__text">
+                  Size: 12.3 KB
                 </div>
-              </a>
-              <a>
-                <div styleName="card__preview-image">
-                  <img styleName="card__image" src="http://localhost:4001/5ad9f20464899b001f43cfdc/resize-width_330,height_330+crop-gravity_center+toFormat-jpeg,quality_50/stock-photo-231256573.jpg" alt="" />
-                  <div styleName="preview-image__text">
-                    Size: 16.5 KB
-                  </div>
+              </div>
+              <div styleName="card__preview-image" onClick={() => this.onPreviewImageClick('picture2', '143')} role="presentation">
+                <img styleName="card__image" src={require('static/images/smallPicture2.jpg')} alt="" />
+                <div styleName="preview-image__text">
+                  Size: 16.5 KB
                 </div>
-              </a>
-              <a>
-                <div styleName="card__preview-image">
-                  <img styleName="card__image" src="http://localhost:4001/5ad9f3fb64899b001f43cfe1/resize-height_330,width_330+crop-gravity_center+toFormat-jpeg,quality_50/stock-photo-240478783.jpg" alt="" />
-                  <div styleName="preview-image__text">
-                    Size: 21.2 KB
-                  </div>
+              </div>
+              <div styleName="card__preview-image" onClick={() => this.onPreviewImageClick('picture3', '138')} role="presentation">
+                <img styleName="card__image" src={require('static/images/smallPicture3.jpg')} alt="" />
+                <div styleName="preview-image__text">
+                  Size: 21.2 KB
                 </div>
-              </a>
+              </div>
             </div>
             <div styleName="card__footer">
                 http://localhost:4001/5ad9b61564899b001f43cfc1/resize-width_330,height_330+crop-gravity_center+toFormat-jpeg,quality_50/stock-photo-240037471.jpg
@@ -59,7 +78,8 @@ class TransformationExamples extends Component {
             <header styleName="card__header">
               <p styleName="card__title">Avatar uploading with face detection</p>
               <p styleName="card__subtitle">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ut metus molestie, sagittis libero vitae, tempor odio.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Maecenas ut metus molestie, sagittis libero vitae, tempor odio.
               </p>
             </header>
             <div styleName="card__images-container card__images-container--arrow">
@@ -79,7 +99,8 @@ class TransformationExamples extends Component {
             <header styleName="card__header">
               <p styleName="card__title">Resizing and cropping image</p>
               <p styleName="card__subtitle">
-                With resize and crop options you can transform images in order to fit into the design of your web or mobile application.
+                With resize and crop options you can transform images in order to
+                fit into the design of your web or mobile application.
               </p>
             </header>
             <div styleName="card__images-container card__images-container--arrow">
@@ -95,15 +116,19 @@ class TransformationExamples extends Component {
             </div>
           </article>
 
-          <div styleName="card__modal" id="card__modal">
-            <button styleName="modal__close">Close</button>
-            <article styleName="modal__content">
-              <div>
-                <img styleName="modal__image" id="modal__image" alt="" />
+          {showFullImage &&
+            <div styleName="modal__overlay" onClick={this.onImagePreviewOverlayClick} role="presentation">
+              <button styleName="modal__close" onClick={this.onImagePreviewClose}>Close</button>
+              <div styleName="modal" ref={(node) => { this.modal = node; }}>
+                <article styleName="modal__content">
+                  <div>
+                    <img styleName="modal__image" alt="" src={require(`static/images/${fullImageName}.jpg`)} />
+                  </div>
+                  <div styleName="modal__footer">Size of the image is {fullImageSize} KB</div>
+                </article>
               </div>
-              <div styleName="modal__footer" id="modal__footer" />
-            </article>
-          </div>
+            </div>
+          }
 
         </section>
       </main>
