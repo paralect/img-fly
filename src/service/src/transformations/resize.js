@@ -47,7 +47,7 @@ const parseQuery = (query) => {
 
 const apply = (query, sharp) => {
   const transformParams = parseQuery(query);
-  logger.info(`Applying [resize] transformation with params: ${JSON.stringify(transformParams)}`);
+  logger.debug(`Applying [resize] transformation with params: ${JSON.stringify(transformParams)}`);
 
   return {
     sharp: sharp.resize(transformParams.width, transformParams.height),

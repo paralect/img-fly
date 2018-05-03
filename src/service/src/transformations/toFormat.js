@@ -63,7 +63,7 @@ const parseQuery = (query) => {
 
 const apply = (query, sharp) => {
   const { format, options } = parseQuery(query);
-  logger.info(`Applying [toFormat]. Converting to ${format} with options: ${JSON.stringify(options)}`);
+  logger.debug(`Applying [toFormat]. Converting to ${format} with options: ${JSON.stringify(options)}`);
 
   return {
     sharp: sharp
