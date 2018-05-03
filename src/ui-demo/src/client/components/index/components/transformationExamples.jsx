@@ -1,5 +1,18 @@
 import React, { Component } from 'react';
 
+import smallPicture1 from 'static/images/smallPicture1.jpg';
+import smallPicture2 from 'static/images/smallPicture2.jpg';
+import smallPicture3 from 'static/images/smallPicture3.jpg';
+import picture1 from 'static/images/picture1.jpg';
+import picture2 from 'static/images/picture2.jpg';
+import picture3 from 'static/images/picture3.jpg';
+import photoForAvatar from 'static/images/photoForAvatar.jpg';
+import avatar from 'static/images/avatar.jpg';
+import beforeBlur from 'static/images/beforeBlur.jpg';
+import blur from 'static/images/blur.jpg';
+import beforeGrayscale from 'static/images/beforeGrayscale.jpg';
+import grayscale from 'static/images/grayscale.jpg';
+
 import './transformationExamples.styles.pcss';
 
 class TransformationExamples extends Component {
@@ -11,7 +24,7 @@ class TransformationExamples extends Component {
     this.setState({
       ...this.state,
       showFullImage: true,
-      fullImageName: image,
+      fullImage: image,
       fullImageSize: size,
     });
   }
@@ -33,7 +46,7 @@ class TransformationExamples extends Component {
   }
 
   render() {
-    const { showFullImage, fullImageName, fullImageSize } = this.state;
+    const { showFullImage, fullImage, fullImageSize } = this.state;
 
     return (
       <main styleName="demo-page">
@@ -50,20 +63,20 @@ class TransformationExamples extends Component {
               </p>
             </header>
             <div styleName="card__images-container">
-              <div styleName="card__preview-image" onClick={() => this.onPreviewImageClick('picture1', '72.3')} role="presentation">
-                <img styleName="card__image" src={require('static/images/smallPicture1.jpg')} alt="" />
+              <div styleName="card__preview-image" onClick={() => this.onPreviewImageClick(picture1, '72.3')} role="presentation">
+                <img styleName="card__image" src={smallPicture1} alt="" />
                 <div styleName="preview-image__text">
                   Size: 12.3 KB
                 </div>
               </div>
-              <div styleName="card__preview-image" onClick={() => this.onPreviewImageClick('picture2', '143')} role="presentation">
-                <img styleName="card__image" src={require('static/images/smallPicture2.jpg')} alt="" />
+              <div styleName="card__preview-image" onClick={() => this.onPreviewImageClick(picture2, '143')} role="presentation">
+                <img styleName="card__image" src={smallPicture2} alt="" />
                 <div styleName="preview-image__text">
                   Size: 16.5 KB
                 </div>
               </div>
-              <div styleName="card__preview-image" onClick={() => this.onPreviewImageClick('picture3', '138')} role="presentation">
-                <img styleName="card__image" src={require('static/images/smallPicture3.jpg')} alt="" />
+              <div styleName="card__preview-image" onClick={() => this.onPreviewImageClick(picture3, '138')} role="presentation">
+                <img styleName="card__image" src={smallPicture3} alt="" />
                 <div styleName="preview-image__text">
                   Size: 21.2 KB
                 </div>
@@ -87,10 +100,10 @@ class TransformationExamples extends Component {
             </header>
             <div styleName="card__images-container card__images-container--arrow card__images-container--avatar-arrow">
               <div styleName="card__photo-avatar-container">
-                <img styleName="card__image" src={require('static/images/photoForAvatar.jpg')} alt="" />
+                <img styleName="card__image" src={photoForAvatar} alt="" />
               </div>
               <div styleName="card__avatar-container">
-                <img styleName="card__image" src={require('static/images/avatar.jpg')} alt="" />
+                <img styleName="card__image" src={avatar} alt="" />
               </div>
             </div>
             <div styleName="card__footer">
@@ -109,10 +122,10 @@ class TransformationExamples extends Component {
             </header>
             <div styleName="card__images-container card__images-container--arrow card__images-container--blur-arrow">
               <div styleName="card__before-blur-container">
-                <img styleName="card__image" src={require('static/images/beforeBlur.jpg')} alt="" />
+                <img styleName="card__image" src={beforeBlur} alt="" />
               </div>
               <div styleName="card__blur-container">
-                <img styleName="card__image" src={require('static/images/blur.jpg')} alt="" />
+                <img styleName="card__image" src={blur} alt="" />
               </div>
             </div>
             <div styleName="card__footer">
@@ -131,10 +144,10 @@ class TransformationExamples extends Component {
             </header>
             <div styleName="card__images-container card__images-container--arrow">
               <div styleName="card__image-container">
-                <img styleName="card__image" src={require('static/images/beforeGrayscale.jpg')} alt="" />
+                <img styleName="card__image" src={beforeGrayscale} alt="" />
               </div>
               <div styleName="card__image-container">
-                <img styleName="card__image" src={require('static/images/grayscale.jpg')} alt="" />
+                <img styleName="card__image" src={grayscale} alt="" />
               </div>
             </div>
             <div styleName="card__footer">
@@ -148,7 +161,7 @@ class TransformationExamples extends Component {
               <div styleName="modal" ref={(node) => { this.modal = node; }}>
                 <article styleName="modal__content">
                   <div>
-                    <img styleName="modal__image" alt="" src={require(`static/images/${fullImageName}.jpg`)} />
+                    <img styleName="modal__image" alt="" src={fullImage} />
                   </div>
                   <div styleName="modal__footer">Size of the image is {fullImageSize} KB</div>
                 </article>
