@@ -70,7 +70,7 @@ class TransformationExamples extends Component {
               </div>
             </div>
             <div styleName="card__footer">
-                http://localhost:4001/5ad9b61564899b001f43cfc1/resize-width_330,height_330+crop-gravity_center+toFormat-jpeg,quality_50/stock-photo-240037471.jpg
+              http://localhost:4001/5aead034234858002e75c1a8/resize-width_330,height_330+crop-gravity_center+toFormat-jpeg,quality_50/picture1.jpg
             </div>
           </article>
 
@@ -94,7 +94,7 @@ class TransformationExamples extends Component {
               </div>
             </div>
             <div styleName="card__footer">
-                http://localhost:4001/5ae999f4448e13001e0c2593/resize-width_300,height_300+max+crop-strategy_attention/stock-photo-256101897.jpg
+              http://localhost:4001/5aead00a234858002e75c1a5/resize-width_300,height_300+max+crop-strategy_attention/photoForAvatar.jpg
             </div>
           </article>
 
@@ -116,7 +116,7 @@ class TransformationExamples extends Component {
               </div>
             </div>
             <div styleName="card__footer">
-                http://localhost:4001/5aeac349448e13001e0c25ad/resize-width_400,height_1080+max+toformat-jpeg,quality_50+blur-sigma_20/stock-photo-254088691.jpg
+              http://localhost:4001/5aeacfc5234858002e75c1a2/resize-width_400,height_1080+max+toformat-jpeg,quality_50+blur-sigma_20/beforeBlur.jpg
             </div>
           </article>
 
@@ -138,7 +138,7 @@ class TransformationExamples extends Component {
               </div>
             </div>
             <div styleName="card__footer">
-                http://localhost:4001/5aeac989234858002e75c19a/resize-width_500,height_1080+max+toformat-jpeg+grayscale/stock-photo-242845961.jpg
+              http://localhost:4001/5aeacf51234858002e75c19f/resize-width_500,height_1080+max+toformat-jpeg+grayscale/beforeGrayscale.jpg
             </div>
           </article>
 
