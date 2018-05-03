@@ -18,6 +18,7 @@ import './transformationExamples.styles.pcss';
 class TransformationExamples extends Component {
   state = {
     showFullImage: false,
+    fullImageLoaded: false,
   }
 
   onPreviewImageClick = (image, size) => {
@@ -32,6 +33,7 @@ class TransformationExamples extends Component {
   onImagePreviewClose = () => {
     this.setState({
       showFullImage: false,
+      fullImageLoaded: false,
     });
   }
 
@@ -40,13 +42,26 @@ class TransformationExamples extends Component {
       if (!this.modal.contains(event.target)) {
         this.setState({
           showFullImage: false,
+          fullImageLoaded: false,
         });
       }
     }
   }
 
+  onFullImageLoad = () => {
+    this.setState({
+      ...this.state,
+      fullImageLoaded: true,
+    });
+  }
+
   render() {
-    const { showFullImage, fullImage, fullImageSize } = this.state;
+    const {
+      showFullImage,
+      fullImage,
+      fullImageSize,
+      fullImageLoaded,
+    } = this.state;
 
     return (
       <main styleName="demo-page">
@@ -161,9 +176,11 @@ class TransformationExamples extends Component {
               <div styleName="modal" ref={(node) => { this.modal = node; }}>
                 <article styleName="modal__content">
                   <div>
-                    <img styleName="modal__image" alt="" src={fullImage} />
+                    <img styleName="modal__image" alt="" onLoad={this.onFullImageLoad} src={fullImage} />
                   </div>
-                  <div styleName="modal__footer">Size of the image is {fullImageSize} KB</div>
+                  {fullImageLoaded &&
+                    <div styleName="modal__footer">Size of the image is {fullImageSize} KB</div>
+                  }
                 </article>
               </div>
             </div>
