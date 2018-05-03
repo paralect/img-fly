@@ -1,16 +1,44 @@
 @import 'variables.pcss';
 
 .header {
-  background-color: #1976d2;
-  color: var(--white);
+  background-color: var(--white);
+  border-bottom: 1px solid #e6e6e6;
   padding: 20px;
   display: flex;
 }
 
+.navigation {
+  width: 1000px;
+  margin: 0 auto;
+  padding-left: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
 .title {
-  color: var(--white);
-  font-weight: 600;
+  color: #585f6f;
+  font-size: 18px;
+  font-weight: 400;
   text-decoration: none;
+}
+
+.linkContainer {
+  display: flex;
+  align-items: center;
+  top: 50px;
+  right: 0;
+  padding-right: 20px;
+}
+
+.linkText {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.linkIcon {
+  width: 24px;
+  height: 24px;
+  margin: 0 0 0 10px;
 }
 
 .user {
