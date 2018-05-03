@@ -2,16 +2,23 @@ import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import { apiClient } from 'helpers/api';
 
+import Loader from './loader';
+
 import './fileUpload.styles.pcss';
 
 class FileUplaod extends Component {
   state = {
     originalUrl: 'Upload any image file..',
     transformUrl: '',
+    loading: false,
   }
 
   onDrop = (acceptedFiles, rejectedFiles) => {
     if (acceptedFiles.length > 0) {
+      this.setState({
+        ...this.state,
+        loading: true,
+      });
       this.uploadFile(acceptedFiles[0]);
     }
   }
@@ -28,6 +35,7 @@ class FileUplaod extends Component {
         this.setState({
           originalUrl,
           transformUrl: `${baseTransformUrl}resize-width_1080,height_1080+max/${originalName}`,
+          loading: false,
         });
       });
   }
@@ -36,7 +44,10 @@ class FileUplaod extends Component {
     return (
       <section styleName="file-upload">
         <Dropzone styleName="dropzone" onDrop={files => this.onDrop(files)}>
-          <div styleName="dropzone__text">Try dropping some files here, or click to select files to upload.</div>
+          {this.state.loading
+            ? <Loader />
+            : <div styleName="dropzone__text">Try dropping some files here, or click to select files to upload.</div>
+          }
         </Dropzone>
         <div styleName="file-upload__result">
           <div styleName="file-upload__title">Uploaded file url</div>
