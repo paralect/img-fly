@@ -51,7 +51,7 @@ class FileUplaod extends Component {
                 <a href={this.state.transformUrl} target="_blank">{this.state.transformUrl}</a>
               </div>
               <div styleName="file-upload__text">
-                <span styleName="file-upload__text--bold">Tip: </span>copy/paste resize transformation url and try chaning values
+                <span styleName="file-upload__text--bold">Tip: </span>copy/paste resize transformation url and try changing values
               </div>
             </div> :
             <span styleName="file-upload__text">

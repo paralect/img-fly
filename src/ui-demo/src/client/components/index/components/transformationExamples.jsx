@@ -46,7 +46,7 @@ class TransformationExamples extends Component {
                 The loss of visual quality is barely noticeable to the human eye,
                 but the size of the image is considerably less.
                 This transformation can be used for creating galleries or lists of images.
-                Once you click on the image, picture with a real size and quality is shown.
+                Once you click on the image, picture with a real size and good quality is shown.
               </p>
             </header>
             <div styleName="card__images-container">
@@ -85,7 +85,7 @@ class TransformationExamples extends Component {
                 mobile application.
               </p>
             </header>
-            <div styleName="card__images-container card__images-container--avatar-arrow">
+            <div styleName="card__images-container card__images-container--arrow card__images-container--avatar-arrow">
               <div styleName="card__photo-avatar-container">
                 <img styleName="card__image" src={require('static/images/photoForAvatar.jpg')} alt="" />
               </div>
@@ -100,22 +100,45 @@ class TransformationExamples extends Component {
 
           <article styleName="demo-page__card">
             <header styleName="card__header">
-              <p styleName="card__title">Resizing and cropping image</p>
+              <p styleName="card__title">Low quality image preview</p>
               <p styleName="card__subtitle">
-                With resize and crop options you can transform images in order to
-                fit into the design of your web or mobile application.
+                While your big and beautiful image with a great quality is loading,
+                user do not want to see an empty screen. With this transformation you
+                can first display a small blurry image, and then load a large one.
+              </p>
+            </header>
+            <div styleName="card__images-container card__images-container--arrow card__images-container--blur-arrow">
+              <div styleName="card__before-blur-container">
+                <img styleName="card__image" src={require('static/images/beforeBlur.jpg')} alt="" />
+              </div>
+              <div styleName="card__blur-container">
+                <img styleName="card__image" src={require('static/images/blur.jpg')} alt="" />
+              </div>
+            </div>
+            <div styleName="card__footer">
+                http://localhost:4001/5aeac349448e13001e0c25ad/resize-width_400,height_1080+max+toformat-jpeg,quality_50+blur-sigma_20/stock-photo-254088691.jpg
+            </div>
+          </article>
+
+          <article styleName="demo-page__card">
+            <header styleName="card__header">
+              <p styleName="card__title">Image effects and filters</p>
+              <p styleName="card__subtitle">
+                Img Fly allows to apply different effects to change visual
+                appearance of uploaded pictures. For example, you can transform
+                an image to grayscale.
               </p>
             </header>
             <div styleName="card__images-container card__images-container--arrow">
               <div styleName="card__image-container">
-                <img styleName="card__image" src="http://localhost:4001/5ad8914064899b001f43cfb5/stock-photo-242845961.jpg" alt="" />
+                <img styleName="card__image" src={require('static/images/beforeGrayscale.jpg')} alt="" />
               </div>
               <div styleName="card__image-container">
-                <img styleName="card__image" src="http://localhost:4001/5ad8914064899b001f43cfb5/grayscale/stock-photo-242845961.jpg" alt="" />
+                <img styleName="card__image" src={require('static/images/grayscale.jpg')} alt="" />
               </div>
             </div>
             <div styleName="card__footer">
-                http://localhost:3001/5ac0bb5fab7ce4028e879d03/extract-left_0,top_30,width_400,height_300+resize-width_300/nice_file_name.png
+                http://localhost:4001/5aeac989234858002e75c19a/resize-width_500,height_1080+max+toformat-jpeg+grayscale/stock-photo-242845961.jpg
             </div>
           </article>
 

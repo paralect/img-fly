@@ -47,9 +47,9 @@ a {
   position: relative;
 }
 
-.card__images-container--avatar-arrow::before {
+.card__images-container--arrow::before {
   position: absolute;
-  top: 50%; left: 65%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
 
   content: '';
@@ -57,13 +57,13 @@ a {
   width: 40px; height: 40px;
   border-radius: 100vmax;
   border: 1px solid #e6e6e6;
-  background-color: #e5e5e5;
+  background-color: #eee;
   opacity: 0.9;
 }
 
-.card__images-container--avatar-arrow::after {
+.card__images-container--arrow::after {
   position: absolute;
-  top: 50%; left: 65%;
+  top: 50%; left: 50%;
   transform: translate(calc(-50% * 1.41), -50%) rotate(45deg);
 
   content: '';
@@ -72,6 +72,24 @@ a {
 
   border-top: 2px solid #808080;
   border-right: 2px solid #808080;
+}
+
+.card__images-container--avatar-arrow::before {
+  top: 50%; left: 65%;
+  background-color: #e5e5e5;
+}
+
+.card__images-container--avatar-arrow::after {
+  top: 50%; left: 65%;
+}
+
+.card__images-container--blur-arrow::before {
+  top: 50%; left: 55%;
+  background-color: #e5e5e5;
+}
+
+.card__images-container--blur-arrow::after {
+  top: 50%; left: 55%;
 }
 
 .card__image-container {
@@ -85,6 +103,10 @@ a {
 
 .card__photo-avatar-container {
   width: 600px;
+}
+
+.card__before-blur-container {
+  width: 500px;
 }
 
 .card__image {
