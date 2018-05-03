@@ -7,6 +7,11 @@ export const indexPath = (options: LocationShape = {}): LocationShape => ({
   pathname: '/',
 });
 
+export const demoPath = (options: LocationShape = {}): LocationShape => ({
+  ...options,
+  pathname: '/demo',
+});
+
 export const profilePath = (options: LocationShape = {}): LocationShape => ({
   ...options,
   pathname: '/profile',

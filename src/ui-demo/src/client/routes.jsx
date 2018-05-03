@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 import type { Node } from 'react';
 
 import Index from './components/index/async';
+import Demo from './components/demo/async';
 
 const key = (title: string): string => {
   return module.hot ? Math.random().toString() : title;
@@ -15,6 +16,7 @@ const key = (title: string): string => {
 const routes = (): Node => (
   <Switch>
     <Route exact path="/" component={Index} key={key('index')} />
+    <Route path="/demo" component={Demo} />
   </Switch>
 );
 

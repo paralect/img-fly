@@ -4,18 +4,29 @@ h1 {
   font-size: var(--text-900);
 }
 
-* {
-  box-sizing: border-box;
-}
-
 .demo-page {
   width: 1000px;
   margin: 0 auto;
   position: relative;
-}
 
-.demo-page__caption {
-  padding: 50px 0;
+  &__caption {
+    padding: 50px 0 90px 0;
+  }
+
+  &__button {
+    padding: 10px 20px;
+    background-color: #56B37F;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 20px;
+    font-weight: 400;
+    display: inline-block;
+    margin: 20px 0 0 20px;
+
+    &:hover {
+      background-color: #54C786;
+    }
+  }
 }
 
 .caption__text {
